@@ -2,19 +2,14 @@
 Thumbs.db
 .DS_Store
 .idea
-.vscode
 *.suo
 *.sublime-project
 *.sublime-workspace
+*.vscode
 
 # Vendors
 node_modules/
 
 # Build
+dist/
 /npm-debug.log
-build/
-out/
-scripts/tsgen/test/bin/
-scripts/tsgen/test/output.txt
-
-plugins/spine*/spine-runtimes/

@@ -1,169 +1,161 @@
-# Phaser - HTML5 Game Framework
+# Phaser Webpack Template
 
-![Phaser Banner](changelog/assets/phaser-banner.png "Phaser Banner")
+This is a Phaser 3 project template that uses webpack for bundling. It supports hot-reloading for quick development workflow and includes scripts to generate production-ready builds.
 
-[![Discord](https://img.shields.io/discord/244245946873937922?style=for-the-badge)](https://discord.gg/phaser)
-![JSDelivr](https://img.shields.io/jsdelivr/npm/hm/phaser?style=for-the-badge)
-![GitHub](https://img.shields.io/github/downloads/phaserjs/phaser/total?style=for-the-badge)
+**[This Template is also available as a TypeScript version.](https://github.com/phaserjs/template-webpack-ts)**
 
-Phaser is a fast, free, and fun open source HTML5 game framework that offers WebGL and Canvas rendering across desktop and mobile web browsers and has been actively developed for over 10 years.
+### Versions
 
-Games can be built for the web, or as YouTube Playables, Discord Activities, Twitch Overlays or compiled to iOS, Android, Steam and native apps using 3rd party tools. You can use JavaScript or TypeScript for development. Phaser supports over 40 different front-end frameworks including React and Vue.
+This template has been updated for:
 
-Phaser is commercially developed and maintained by **Phaser Studio Inc** along with our fantastic open source community. As a result of rapid support, and a developer friendly API, Phaser is currently one of the [most starred](https://github.com/collections/javascript-game-engines) game frameworks on GitHub.
+- [Phaser 3.88.2](https://github.com/phaserjs/phaser)
+- [Webpack 5.91.0](https://github.com/webpack/webpack)
 
-Interested in learning more? Click the image below to watch our intro video.
+![screenshot](screenshot.png)
 
-[![YouTube](http://i.ytimg.com/vi/jHTRu4iNTcA/maxresdefault.jpg)](https://www.youtube.com/watch?v=jHTRu4iNTcA)
+## Requirements
 
-## Create Phaser Game App
+[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
 
-The easiest way to get started quickly with Phaser is our `create-phaser-game` app. This CLI tool presents an interactive selection of official project templates and demo games. Issue the command, answer some questions and the app will download and configure the right package for you.
+## Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm install` | Install project dependencies |
+| `npm run dev` | Launch a development web server |
+| `npm run build` | Create a production build in the `dist` folder |
+| `npm run dev-nolog` | Launch a development web server without sending anonymous data (see "About log.js" below) |
+| `npm run build-nolog` | Create a production build in the `dist` folder without sending anonymous data (see "About log.js" below) |
+
+## Writing Code
+
+After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server by running `npm run dev`.
+
+The local development server runs on `http://localhost:8080` by default. Please see the webpack documentation if you wish to change this, or add SSL support.
+
+Once the server is running you can edit any of the files in the `src` folder. Webpack will automatically recompile your code and then reload the browser.
+
+## Template Project Structure
+
+We have provided a default project structure to get you started. This is as follows:
+
+- `index.html` - A basic HTML page to contain the game.
+- `src` - Contains the game source code.
+- `src/main.js` - The main entry point. This contains the game configuration and starts the game.
+- `src/scenes/` - The Phaser Scenes are in this folder.
+- `public/style.css` - Some simple CSS rules to help with page layout.
+- `public/assets` - Contains the static assets used by the game.
+
+## Handling Assets
+
+Webpack supports loading assets via JavaScript module `import` statements.
+
+This template provides support for both embedding assets and also loading them from a static folder. To embed an asset, you can import it at the top of the JavaScript file you are using it in:
+
+```js
+import logoImg from './assets/logo.png'
+```
+
+To load static files such as audio files, videos, etc place them into the `public/assets` folder. Then you can use this path in the Loader calls within Phaser:
+
+```js
+preload ()
+{
+    //  This is an example of an imported bundled image.
+    //  Remember to import it at the top of this file
+    this.load.image('logo', logoImg);
+
+    //  This is an example of loading a static image
+    //  from the public/assets folder:
+    this.load.image('background', 'assets/bg.png');
+}
+```
+
+When you issue the `npm run build` command, all static assets are automatically copied to the `dist/assets` folder.
+
+## Deploying to Production
+
+After you run the `npm run build` command, your code will be built into a single bundle and saved to the `dist` folder, along with any other assets your project imported, or stored in the public assets folder.
+
+In order to deploy your game, you will need to upload *all* of the contents of the `dist` folder to a public facing web server.
+
+## Customizing the Template
+
+### Babel
+
+You can write modern ES6+ JavaScript and Babel will transpile it to a version of JavaScript that you want your project to support. The targeted browsers are set in the `.babelrc` file and the default currently targets all browsers with total usage over "0.25%" but excludes IE11 and Opera Mini.
+
+ ```
+"browsers": [
+  ">0.25%",
+  "not ie 11",
+  "not op_mini all"
+]
+ ```
+
+### Webpack
+
+If you want to customize your build, such as adding a new webpack loader or plugin (i.e. for loading CSS or fonts), you can modify the `webpack/config.js` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json`. Please see the [Webpack documentation](https://webpack.js.org/) for more information.
+
+## About log.js
+
+If you inspect our node scripts you will see there is a file called `log.js`. This file makes a single silent API call to a domain called `gryzor.co`. This domain is owned by Phaser Studio Inc. The domain name is a homage to one of our favorite retro games.
+
+We send the following 3 pieces of data to this API: The name of the template being used (vue, react, etc). If the build was 'dev' or 'prod' and finally the version of Phaser being used.
+
+At no point is any personal data collected or sent. We don't know about your project files, device, browser or anything else. Feel free to inspect the `log.js` file to confirm this.
+
+Why do we do this? Because being open source means we have no visible metrics about which of our templates are being used. We work hard to maintain a large and diverse set of templates for Phaser developers and this is our small anonymous way to determine if that work is actually paying off, or not. In short, it helps us ensure we're building the tools for you.
+
+However, if you don't want to send any data, you can use these commands instead:
+
+Dev:
 
 ```bash
-npm create @phaserjs/game@latest
-npx @phaserjs/create-game@latest
-yarn create @phaserjs/game
-pnpm create @phaserjs/game@latest
-bun create @phaserjs/game@latest
+npm run dev-nolog
 ```
 
-We support all of the following frameworks and bundlers:
-
-| Frameworks | Bundlers |
-| --------- | ------- |
-| Vue.js | Vite |
-| React | Rollup |
-| Angular | Parcel |
-| Next.js | Webpack |
-| SolidJS | ESBuild |
-| Svelte | Import Map |
-| Remix | Bun |
-
-Most come in both JavaScript and TypeScript versions.
-
-[View the create game app tutorial](https://phaser.io/tutorials/create-game-app).
-
-## Installing Phaser from NPM
-
-Install via [npm](https://www.npmjs.com/package/phaser):
+Build:
 
 ```bash
-npm install phaser
+npm run build-nolog
 ```
 
-## Using Phaser from a CDN
+Or, to disable the log entirely, simply delete the file `log.js` and remove the call to it in the `scripts` section of `package.json`:
 
-[Phaser is on jsDelivr](https://www.jsdelivr.com/package/npm/phaser) which is a "super-fast CDN for developers". Include _either_ of the following in your html:
-
-```html
-<script src="//cdn.jsdelivr.net/npm/phaser@3.88.2/dist/phaser.js"></script>
-<script src="//cdn.jsdelivr.net/npm/phaser@3.88.2/dist/phaser.min.js"></script>
-```
-
-It is also available from Cloudflare's [cdnjs](https://cdnjs.com/libraries/phaser):
-
-```html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.88.2/phaser.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.88.2/phaser.min.js"></script>
-```
-
-## Phaser TypeScript Definitions
-
-Full TypeScript definitions can be found inside the [types folder](https://github.com/phaserjs/phaser/tree/master/types). They are also referenced in the `types` entry in `package.json`, meaning modern editors such as VSCode will detect them automatically.
-
-Depending on your project, you may need to add the following to your `tsconfig.json` file:
+Before:
 
 ```json
-"lib": ["es6", "dom", "dom.iterable", "scripthost"],
-"typeRoots": ["./node_modules/phaser/types"],
-"types": ["Phaser"]
+"scripts": {
+    "dev": "node log.js dev & dev-template-script",
+    "build": "node log.js build & build-template-script"
+},
 ```
 
-## API Documentation
+After:
 
-Read our full API Documentation at https://docs.phaser.io/. Use the links at the top of the page to navigate the namespaces, classes, events and Game Objects and also to use the search box.
+```json
+"scripts": {
+    "dev": "dev-template-script",
+    "build": "build-template-script"
+},
+```
 
-We maintain documentation for the most recent versions of Phaser on this site.
+Either of these will stop `log.js` from running. If you do decide to do this, please could you at least join our Discord and tell us which template you're using! Or send us a quick email. Either will be super-helpful, thank you.
 
-## Getting Started with Phaser
+## Join the Phaser Community!
 
-We recommend the following to begin your journey:
+We love to see what developers like you create with Phaser! It really motivates us to keep improving. So please join our community and show-off your work 😄
 
-* [Getting Started with Phaser 3](https://phaser.io/tutorials/getting-started-phaser3) (useful if you are completely new to Phaser)
-* [Making your first Phaser 3 Game](https://phaser.io/tutorials/making-your-first-phaser-3-game)
-* Plus, there are [over 700 Phaser tutorials](https://phaser.io/learn) listed on our website.
+**Visit:** The [Phaser website](https://phaser.io) and follow on [Phaser Twitter](https://twitter.com/phaser_)<br />
+**Play:** Some of the amazing games [#madewithphaser](https://twitter.com/search?q=%23madewithphaser&src=typed_query&f=live)<br />
+**Learn:** [API Docs](https://newdocs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
+**Discord:** Join us on [Discord](https://discord.gg/phaser)<br />
+**Code:** 2000+ [Examples](https://labs.phaser.io)<br />
+**Read:** The [Phaser World](https://phaser.io/community/newsletter) Newsletter<br />
 
-New tutorials are being published every week, so check our site for more.
+Created by [Phaser Studio](mailto:support@phaser.io). Powered by coffee, anime, pixels and love.
 
-## Phaser by Example Book
-
-We have published a brand-new free 500 page book on game development with Phaser. Learn by building shoot-em-ups, puzzle games, rogue-likes and more.
-
-![Phaser by Example](https://cdn.phaser.io/news/2024/04/phaser-by-example-book.jpg)
-
-Written by long-time prolific Phaser enthusiast Pello Xabier Altadill and Richard Davey, creator of Phaser, it features up-to-date content on building games with Phaser v3.85.
-
-Work through the process of creating a variety of games, allowing you to learn from real-life examples. The games start simple, with an infinite runner game, and then progresses to building a shoot-em-up, a platformer, a puzzle game, a rogue-like, a story game and even 3D and multiplayer games.
-
-It also contains a large section on the core concepts of Phaser, covering the terminology and conventions used by the framework, as well as a comprehensive deep dive into Game Objects.
-
-Register for a free Phaser account to [download the book](https://phaser.io/news/2024/04/phaser-by-example-book).
-
-## Source Code Examples
-
-We have created hundreds of examples and they are all available with full source code and assets. 
-
-Browse our brand new [Phaser Examples site](https://phaser.io/examples).
-
-## Phaser 3 Plugins
-
-Super community member RexRainbow has been publishing Phaser content for years, compiling an impressive catalogue of plugins that all Phaser developers should be aware of.
-
-You'll find [Phaser Plugins](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/index.html#list-of-my-plugins) that extend the framework with features such as UI controls, text input boxes, Firebase support, Finite State Machines and lots more. His set of [Phaser Notes](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/index.html) are also invaluable reading.
-
-## Phaser Sandbox
-
-The Phaser Sandbox is a fully-configured online editor, ready to go direct in your desktop browser. It's loaded with all the core versions of Phaser and packed full of handy features. [Register for a free Phaser account](https://phaser.io/register) to create and save your own sandbox entries. Or view one [just like this](https://phaser.io/sandbox/XyqPcjNr).
-
-## Phaser Compressor
-
-Use our powerful new web-based tool to crunch your Phaser bundles down by up to 60%, enabling only the features your game requires.
-
-Read more about [Phaser Compressor](https://phaser.io/news/2024/05/phaser-compressor-released)
-
-## Change Log
-
-We meticulously keep track of new features, updates and bug fixes in our change logs. Each version of Phaser has its own change log:
-
-* [v3.88 Change Log](changelog/3.88/CHANGELOG-v3.88.md)
-* [v3.0.0 to v3.87 Change Logs](CHANGELOG.md)
-
-## Have fun!
-
-Grab the source and join the fun!
-
-Phaser wouldn't have been possible without the fantastic support of the community. Thank you to everyone who supports our work, who shares our belief in the future of HTML5 gaming, and Phaser's role in that.
-
-Happy coding everyone!
-
-Cheers,
-
-[Rich](mailto:rich@phaser.io) and the whole team at Phaser Studio
-
-![boogie](https://www.phaser.io/images/spacedancer.gif)
-
-**Visit** the [Phaser website](https://phaser.io)<br />
-**Play** some [amazing games](https://phaser.io/games)<br />
-**Learn** By browsing our [API Docs](https://docs.phaser.io), [Support Forum](https://phaser.discourse.group/) and [StackOverflow](https://stackoverflow.com/questions/tagged/phaser-framework)<br />
-**Code Examples?** We've over 2000 [Examples](https://phaser.io/examples) to learn from<br />
-**Read** the weekly [Phaser World](https://phaser.world) Newsletter<br />
-**Be Social:** Join us on [Discord](https://discord.com/invite/phaser) and [Reddit](https://www.reddit.com/r/phaser/) or follow us on [BlueSky](https://bsky.app/profile/phaser.io)<br />
-
-Powered by coffee, anime, pixels and love.
-
-The Phaser logo and characters are &copy; 2011 - 2025 Phaser Studio Inc.
+The Phaser logo and characters are &copy; 2011 - 2024 Phaser Studio Inc.
 
 All rights reserved.
-
-"Above all, video games are meant to be just one thing: fun. Fun for everyone." - Satoru Iwata
